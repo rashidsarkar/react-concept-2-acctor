@@ -5,6 +5,7 @@ import NameCard from "../NameCard/NameCard";
 const Cart = () => {
   const [allActorsData, setAllActorsData] = useState([]);
   const [selectAcctor, setSelectAcctor] = useState([]);
+  const [totalExpen, setTotalExpen] = useState(0);
   useEffect(() => {
     fetch("data.json")
       .then((res) => res.json())
@@ -14,11 +15,21 @@ const Cart = () => {
     // setSelectAcctor([...selectAcctor, acctor]);
     const oldAcc = [...selectAcctor];
     // console.log(selectAcctor);
-    if (!oldAcc.includes(acctor)) {
+    const newAcc = selectAcctor.find((item) => item.name === acctor.name);
+
+    if (!newAcc) {
       oldAcc.push(acctor);
+
       setSelectAcctor(oldAcc);
+      if (totalExpen + acctor.salary > 20000) {
+        alert("we dontr money");
+      } else {
+        setTotalExpen(totalExpen + acctor.salary);
+      }
     }
   };
+  let totalExp = totalExpen;
+
   return (
     <div className="flex justify-around ">
       <div className="flex justify-between w-[900px] flex-wrap gap-4  ">
@@ -30,8 +41,8 @@ const Cart = () => {
           ></SingleCard>
         ))}
       </div>
-      <div className="bg-fuchsia-500 w-[300px]">
-        <NameCard selectAcctor={selectAcctor}></NameCard>
+      <div className="bg-fuchsia-500 w-[370px]">
+        <NameCard totalExp={totalExp} selectAcctor={selectAcctor}></NameCard>
       </div>
     </div>
   );
